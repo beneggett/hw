@@ -1,0 +1,4 @@
+nick: mynick
+channel: '#hwhacking'
+auto_rejoin: true
+nickserv_password: mypass
