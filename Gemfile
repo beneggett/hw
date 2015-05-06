@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 
 gem 'pry'
-gem 'summer'
+gem 'summer', github: 'QuintinAdam/summer'
+gem 'httparty'
+gem 'hashie'
 gem 'dino'
-gem 'twilio-ruby'
+gem 'sphero'
+# gem 'twilio-ruby'
