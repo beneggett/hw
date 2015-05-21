@@ -78,6 +78,40 @@ class HW
     end
   end
 
+  def who_picks_lunch?
+    `say 'who gets to pick lunch today?'`
+    time = 0
+    delay = 0.001
+    leds.cycle do |led|
+      delay += rand(0.002..0.03)
+      time += delay
+      blink(led, delay)
+      if delay >= 0.33
+
+        puts time
+        winner = pin_names.find{|pin| pin[:led] == led.pin}[:name]
+        case winner
+        when 'yellow'
+          picker = 'cody'
+        when 'green'
+            picker = 'cody'
+        when 'blue'
+          picker = 'ben'
+        when 'red'
+          picker = 'quintin'
+        end
+        puts "#{picker.capitalize} wins!"
+        led.on
+        `say "#{picker.capitalize} gets to pick lunch today, and cody pays. you lucky dog!"`
+
+        break
+      end
+      # break if button.down
+    end
+  end
+
+
+
   def activate!
     button.down do
       spin_the_wheel

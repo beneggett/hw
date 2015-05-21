@@ -1,4 +1,6 @@
-nick: mynick
-channel: '#hwhacking'
+nick: ENV['NICK']
+use_ssl: true
+server_password: ENV['SERVER_PASS']
+channel: ENV['CHANNEL']
 auto_rejoin: true
-nickserv_password: mypass
+# nickserv_password:
