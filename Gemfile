@@ -1,9 +1,11 @@
 source 'https://rubygems.org'
 
 gem 'pry'
-gem 'summer', github: 'QuintinAdam/summer'
+gem 'summer', git: 'git@github.com:beneggett/summer'
 gem 'httparty'
 gem 'hashie'
 gem 'dino'
 gem 'sphero'
-# gem 'twilio-ruby'
+gem 'ffaker'
+gem 'music_theory'
+gem 'twilio-ruby'
