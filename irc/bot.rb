@@ -37,21 +37,21 @@ class Bot < Summer::Connection
         response = Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") )
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=fail&api_key=dc6zaTOxFJmzC") )
 
-        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response['insult']}. Take this: #{gif.data.images.original.url}"
+        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response['insult']}."
       elsif message =~ /passed/
         response = Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=success&api_key=dc6zaTOxFJmzC") )
 
-        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response['motivation']}. Take this: #{gif.data.images.original.url} "
+        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response['motivation']}. "
       elsif message =~ /errored/
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=error&api_key=dc6zaTOxFJmzC") )
 
         message_reply = "Hey #{who}, your build errored out on #{project}, #{branch} branch. Take a look! #{gif.data.images.original.url} "
       else
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=confused&api_key=dc6zaTOxFJmzC") )
-        message_reply = "Hmm.... #{gif.data.images.original.url}"
+        message_reply = "Hmm.... "
       end
-      direct_at(channel, message_reply)
+      direct_at(channel, "#{message_reply} #{gif.data.images.original.url if gif }")
       ` say "#{message_reply}"" `
     end
 
