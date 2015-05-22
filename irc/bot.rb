@@ -32,11 +32,13 @@ class Bot < Summer::Connection
       project, branch = what.gsub('@', ', ').gsub('-', ' ' ).gsub('/', '').split(',')
       status = how.split(' in ').first.split().last
       who = how.split(' in ').first.gsub(status, '')
+      first_name = who.split().first
       if status =~ /failed/
         response = Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") )
-        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. #{who}, #{response['insult']}"
+        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. #{who}. Hey, #{first_name}, #{response['insult']}"
       elsif message =~ /passed/
-        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch!"
+        response = Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
+        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response['motivation']} "
       end
       direct_at(channel, message_reply)
       ` say "#{message_reply}"" `
