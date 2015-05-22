@@ -35,14 +35,21 @@ class Bot < Summer::Connection
       first_name = who.split().first
       if status =~ /failed/
         response = Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") )
-        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response['insult']}"
+        gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=fail&api_key=dc6zaTOxFJmzC") )
+
+        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response['insult']}. Take this: #{gif.data.images.original.url}"
       elsif message =~ /passed/
         response = Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
-        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response['motivation']} "
+        gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=success&api_key=dc6zaTOxFJmzC") )
+
+        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response['motivation']}. Take this: #{gif.data.images.original.url} "
       elsif message =~ /errored/
-        message_reply = "Hey #{who}, your build errored out on #{project}, #{branch} branch. Take a look!"
+        gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=error&api_key=dc6zaTOxFJmzC") )
+
+        message_reply = "Hey #{who}, your build errored out on #{project}, #{branch} branch. Take a look! #{gif.data.images.original.url} "
       else
-        message_reply = 'Hmm....'
+        gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=confused&api_key=dc6zaTOxFJmzC") )
+        message_reply = "Hmm.... #{gif.data.images.original.url}"
       end
       direct_at(channel, message_reply)
       ` say "#{message_reply}"" `
@@ -53,11 +60,17 @@ class Bot < Summer::Connection
     end
     if message =~ /spin/
       puts "Spinning the wheel"
+      gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=spin+the+wheel&api_key=dc6zaTOxFJmzC") )
+      direct_at(channel, "Spinning the wheel. #{gif.data.images.original.url}")
+
       HW.new().spin_the_wheel
     end
 
     if message =~ /lunch/
       puts "Lunch Raffle!"
+      gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=lunch&api_key=dc6zaTOxFJmzC") )
+      direct_at(channel, "Raffle! #{gif.data.images.original.url}")
+
       HW.new().who_picks_lunch?
     end
 
@@ -71,7 +84,6 @@ class Bot < Summer::Connection
       Messenger.new().picture_message("just for you, from #{sender}", message.gsub("#{ENV['NICK']}: sendpic ", '') )
     end
 
-    # direct_at(sender[:nick], message)
   end
 
   def direct_at(reply_to, message, who=nil)
@@ -81,4 +93,4 @@ class Bot < Summer::Connection
 
 end
 Bot.new(ENV['IRC_SERVER'])
-# Bot.new('irc.freenode.net')
+
