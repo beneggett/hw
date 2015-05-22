@@ -39,6 +39,10 @@ class Bot < Summer::Connection
       elsif message =~ /passed/
         response = Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
         message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response['motivation']} "
+      elsif message =~ /errored/
+        message_reply = "Hey #{who}, your build errored out on #{project}, #{branch} branch. Take a look!"
+      else
+        message_reply = 'Hmm....'
       end
       direct_at(channel, message_reply)
       ` say "#{message_reply}"" `
