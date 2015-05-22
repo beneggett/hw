@@ -35,7 +35,7 @@ class Bot < Summer::Connection
       first_name = who.split().first
       if status =~ /failed/
         response = Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") )
-        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. #{who}. Hey, #{first_name}, #{response['insult']}"
+        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response['insult']}"
       elsif message =~ /passed/
         response = Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
         message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response['motivation']} "
