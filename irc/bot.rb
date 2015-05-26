@@ -3,7 +3,7 @@ require 'summer'
 require 'httparty'
 require 'hashie'
 require 'ffaker'
-
+require 'shellwords'
 load '../led-demo.rb'
 # load '../twilio.rb'
 class Bot < Summer::Connection
