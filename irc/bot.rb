@@ -52,11 +52,11 @@ class Bot < Summer::Connection
         message_reply = "Hmm.... "
       end
       direct_at(channel, "#{message_reply} #{gif.data.images.original.url if gif }")
-      ` say "#{message_reply}"" `
+      ` say "#{message_reply}" `
     end
 
     if message =~ /cody/
-      ` say cody, stop being a slacker. #{sender[:nick]} says #{message.gsub('cody', '')} `
+      ` say "cody, stop being a slacker. #{sender[:nick]} says #{message.gsub('cody', '')}"" `
     end
     if message =~ /spin/
       puts "Spinning the wheel"
