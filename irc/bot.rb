@@ -3,7 +3,7 @@ require 'summer'
 require 'httparty'
 require 'hashie'
 require 'ffaker'
-require 'shellwords'
+
 load '../led-demo.rb'
 # load '../twilio.rb'
 class Bot < Summer::Connection
@@ -23,7 +23,7 @@ class Bot < Summer::Connection
           s
         end
       end.join
-      ` say #{Shellwords.escape text} `
+      ` say #{text} `
 
     end
 
@@ -52,11 +52,11 @@ class Bot < Summer::Connection
         message_reply = "Hmm.... "
       end
       direct_at(channel, "#{message_reply} #{gif.data.images.original.url if gif }")
-      ` say #{Shellwords.escape message_reply} `
+      ` say "#{message_reply}" `
     end
 
     if message =~ /cody/
-      ` say "cody, stop being a slacker. #{Shellwords.escape sender[:nick]} says #{Shellwords.escape( message.gsub('cody', '') )}"" `
+      ` say "cody, stop being a slacker. #{sender[:nick]} says #{message.gsub('cody', '')}"" `
     end
     if message =~ /spin/
       puts "Spinning the wheel"
@@ -75,7 +75,7 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{ENV['NICK']}: say /
-      ` say "#{Shellwords.escape( message.gsub('@', '').gsub("#{ENV['NICK']}: say", '') )}"`
+      ` say "#{message.gsub('@', '').gsub("#{ENV['NICK']}: say", '')}"`
     end
     if message =~ /#{ENV['NICK']}: send /
       Messenger.new().message(message.gsub("@", "").gsub("#{ENV['NICK']}: send", ''))
