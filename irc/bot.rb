@@ -17,8 +17,7 @@ class Bot < Summer::Connection
     # end
 
     if sender[:nick] =~ /SLACK/ && message =~ /github.com/
-
-      ` say #{clean_message_for_speech(message)} `
+      say message
 
     end
 
@@ -47,11 +46,11 @@ class Bot < Summer::Connection
         message_reply = "Hmm.... "
       end
       direct_at(channel, "#{message_reply} #{gif.data.images.original.url if gif }")
-      ` say '#{clean_message_for_speech( message_reply )}' `
+      say message_reply
     end
 
     if message =~ /cody/
-      ` say "cody stop being a slacker. #{sender[:nick]} says #{ clean_message_for_speech( message.gsub('cody', '') )}" `
+      say "cody stop being a slacker. #{sender[:nick]} says #{ message.gsub('cody', '') }"
     end
     if message =~ /spin/
       puts "Spinning the wheel"
@@ -70,7 +69,7 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{ENV['NICK']}: say /
-      ` say "#{clean_message_for_speech( message.gsub("#{ENV['NICK']}: say", '') )}"`
+      say "#{message.gsub("#{ENV['NICK']}: say", '') }"
     end
     if message =~ /#{ENV['NICK']}: send /
       Messenger.new().message(message.gsub("@", "").gsub("#{ENV['NICK']}: send", ''))
@@ -87,11 +86,16 @@ class Bot < Summer::Connection
   end
 
   def clean_message_for_speech(message)
-    message.gsub(',', '').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '').split(URI_REGEX).collect do |s|
+    message.gsub(',', '').gsub('/', ' ').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '').split(URI_REGEX).collect do |s|
       unless s =~ URI_REGEX
         s
       end
     end.join
+  end
+
+  def say(message)
+    msg = clean_message_for_speech(message)
+    msg.scan(/.{1,95}\b|.{1,95}/).map(&:strip).each {|trimmed_message| `say "#{trimmed_message}" `}
   end
 end
 Bot.new(ENV['IRC_SERVER'])
