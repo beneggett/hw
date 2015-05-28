@@ -18,12 +18,7 @@ class Bot < Summer::Connection
 
     if sender[:nick] =~ /SLACK/ && message =~ /github.com/
 
-      text = message.split(URI_REGEX).collect do |s|
-        unless s =~ URI_REGEX
-          s
-        end
-      end.join
-      ` say #{text.gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')} `
+      ` say #{clean_message_for_speech(message)} `
 
     end
 
@@ -52,11 +47,11 @@ class Bot < Summer::Connection
         message_reply = "Hmm.... "
       end
       direct_at(channel, "#{message_reply} #{gif.data.images.original.url if gif }")
-      ` say '#{message_reply.gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')}' `
+      ` say '#{clean_message_for_speech( message_reply )}' `
     end
 
     if message =~ /cody/
-      ` say "cody stop being a slacker. #{sender[:nick]} says #{message.gsub('cody', '').gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')}" `
+      ` say "cody stop being a slacker. #{sender[:nick]} says #{ clean_message_for_speech( message.gsub('cody', '') )}" `
     end
     if message =~ /spin/
       puts "Spinning the wheel"
@@ -75,7 +70,7 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{ENV['NICK']}: say /
-      ` say "#{message.gsub('@', '').gsub("#{ENV['NICK']}: say", '').gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')}"`
+      ` say "#{clean_message_for_speech( message.gsub("#{ENV['NICK']}: say", '') )}"`
     end
     if message =~ /#{ENV['NICK']}: send /
       Messenger.new().message(message.gsub("@", "").gsub("#{ENV['NICK']}: send", ''))
@@ -91,6 +86,13 @@ class Bot < Summer::Connection
     privmsg(message, reply_to)
   end
 
+  def clean_message_for_speech(message)
+    message.gsub(',', '').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '').split(URI_REGEX).collect do |s|
+      unless s =~ URI_REGEX
+        s
+      end
+    end.join
+  end
 end
 Bot.new(ENV['IRC_SERVER'])
 
