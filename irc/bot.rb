@@ -23,7 +23,7 @@ class Bot < Summer::Connection
           s
         end
       end.join
-      ` say #{text.gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '')} `
+      ` say #{text.gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')} `
 
     end
 
@@ -52,11 +52,11 @@ class Bot < Summer::Connection
         message_reply = "Hmm.... "
       end
       direct_at(channel, "#{message_reply} #{gif.data.images.original.url if gif }")
-      ` say '#{message_reply.gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '')}' `
+      ` say '#{message_reply.gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')}' `
     end
 
     if message =~ /cody/
-      ` say "cody stop being a slacker. #{sender[:nick]} says #{message.gsub('cody', '').gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '')}" `
+      ` say "cody stop being a slacker. #{sender[:nick]} says #{message.gsub('cody', '').gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')}" `
     end
     if message =~ /spin/
       puts "Spinning the wheel"
@@ -75,7 +75,7 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{ENV['NICK']}: say /
-      ` say "#{message.gsub('@', '').gsub("#{ENV['NICK']}: say", '').gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '')}"`
+      ` say "#{message.gsub('@', '').gsub("#{ENV['NICK']}: say", '').gsub(',', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')}"`
     end
     if message =~ /#{ENV['NICK']}: send /
       Messenger.new().message(message.gsub("@", "").gsub("#{ENV['NICK']}: send", ''))
