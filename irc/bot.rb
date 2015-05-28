@@ -23,7 +23,7 @@ class Bot < Summer::Connection
           s
         end
       end.join
-      ` say #{text} `
+      ` say #{text.gsub(',', '').gsub('"', '').gsub("'", '')} `
 
     end
 
@@ -37,12 +37,12 @@ class Bot < Summer::Connection
         response = Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") )
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=fail&api_key=dc6zaTOxFJmzC") )
 
-        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response['insult']}"
+        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response.insult}"
       elsif message =~ /passed/
         response = Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=success&api_key=dc6zaTOxFJmzC") )
 
-        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response['motivation']}"
+        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response.motivation}"
       elsif message =~ /errored/
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=error&api_key=dc6zaTOxFJmzC") )
 
@@ -52,11 +52,11 @@ class Bot < Summer::Connection
         message_reply = "Hmm.... "
       end
       direct_at(channel, "#{message_reply} #{gif.data.images.original.url if gif }")
-      ` say "#{message_reply}" `
+      ` say '#{message_reply.gsub(',', '').gsub('"', '').gsub("'", '')}' `
     end
 
     if message =~ /cody/
-      ` say "cody, stop being a slacker. #{sender[:nick]} says #{message.gsub('cody', '')}" `
+      ` say "cody stop being a slacker. #{sender[:nick]} says #{message.gsub('cody', '').gsub(',', '').gsub('"', '').gsub("'", '')}" `
     end
     if message =~ /spin/
       puts "Spinning the wheel"
@@ -75,7 +75,7 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{ENV['NICK']}: say /
-      ` say "#{message.gsub('@', '').gsub("#{ENV['NICK']}: say", '')}"`
+      ` say "#{message.gsub('@', '').gsub("#{ENV['NICK']}: say", '').gsub(',', '').gsub('"', '').gsub("'", '')}"`
     end
     if message =~ /#{ENV['NICK']}: send /
       Messenger.new().message(message.gsub("@", "").gsub("#{ENV['NICK']}: send", ''))
