@@ -86,11 +86,11 @@ class Bot < Summer::Connection
   end
 
   def clean_message_for_speech(message)
-    message.gsub(',', '').gsub('/', ' ').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '').split(URI_REGEX).collect do |s|
+    message.split(URI_REGEX).collect do |s|
       unless s =~ URI_REGEX
         s
       end
-    end.join
+    end.join.gsub(',', '').gsub('/', ' ').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '')
   end
 
   def say(message)
