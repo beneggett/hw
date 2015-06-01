@@ -28,12 +28,12 @@ class Bot < Summer::Connection
       who = how.split(' in ').first.gsub(status, '')
       first_name = who.split().first
       if status =~ /failed/
-        response = Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") )
+        response = get_insult
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=fail&api_key=dc6zaTOxFJmzC") )
 
         message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response.insult}"
       elsif message =~ /passed/
-        response = Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
+        response = get_motivation
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=success&api_key=dc6zaTOxFJmzC") )
 
         message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response.motivation}"
@@ -52,6 +52,7 @@ class Bot < Summer::Connection
     if message =~ /cody/
       say "cody stop being a slacker. #{sender[:nick]} says #{ message.gsub('cody', '') }"
     end
+
     if message =~ /spin/
       puts "Spinning the wheel"
       gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=spin+the+wheel&api_key=dc6zaTOxFJmzC") )
@@ -78,6 +79,17 @@ class Bot < Summer::Connection
       Messenger.new().picture_message("just for you, from #{sender}", message.gsub("#{ENV['NICK']}: sendpic ", '') )
     end
 
+    if message =~ /#{ENV['NICK']}: insult /
+      msg =  message.gsub("#{ENV['NICK']}: insult", "") + ', ' + get_insult.insult
+      direct_at(channel, msg)
+      say msg
+    end
+
+    if message =~ /#{ENV['NICK']}: motivate /
+      msg = message.gsub("#{ENV['NICK']}: motivate", "") + ', '  + get_motivation.motivation
+      direct_at(channel, msg)
+      say msg
+    end
   end
 
   def direct_at(reply_to, message, who=nil)
@@ -96,6 +108,14 @@ class Bot < Summer::Connection
   def say(message)
     msg = clean_message_for_speech(message)
     msg.scan(/.{1,95}\b|.{1,95}/).map(&:strip).each {|trimmed_message| `say "#{trimmed_message}" `}
+  end
+
+  def get_insult
+    Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") )
+  end
+
+  def get_motivation
+    Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
   end
 end
 Bot.new(ENV['IRC_SERVER'])
