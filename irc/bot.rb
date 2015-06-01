@@ -49,9 +49,7 @@ class Bot < Summer::Connection
       say message_reply
     end
 
-    if message =~ /cody/
-      say "cody stop being a slacker. #{sender[:nick]} says #{ message.gsub('cody', '') }"
-    end
+
 
     if message =~ /spin/
       puts "Spinning the wheel"
@@ -80,15 +78,19 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{ENV['NICK']}: insult /
-      msg =  message.gsub("#{ENV['NICK']}: insult", "") + ', ' + get_insult.insult
+      msg =  message.gsub("#{ENV['NICK']}", "").gsub('insult', '').gsub(':', '') + ', ' + get_insult.insult
       direct_at(channel, msg)
       say msg
     end
 
     if message =~ /#{ENV['NICK']}: motivate /
-      msg = message.gsub("#{ENV['NICK']}: motivate", "") + ', '  + get_motivation.motivation
+      msg = message.gsub("#{ENV['NICK']}", "").gsub('motivate', '').gsub(':', '') + ', '  + get_motivation.motivation
       direct_at(channel, msg)
       say msg
+    end
+
+    if message =~ /cody/
+      say "cody stop being a slacker. #{sender[:nick]} says #{ message.gsub('cody', '') }"
     end
   end
 
