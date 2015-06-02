@@ -95,7 +95,7 @@ class Bot < Summer::Connection
     end
 
     if message =~ /cody/
-      say "cody stop being a slacker. #{sender[:nick]} says #{ message.gsub('cody', '') }"
+      say "cody stop being a slacker. #{get_insult}"
     end
   end
 
