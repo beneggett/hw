@@ -65,32 +65,29 @@ class Bot < Summer::Connection
       HW.new().who_picks_lunch?
     end
 
-    if message =~ /#{ENV['NICK']}: say /
-      say "#{message.gsub("#{ENV['NICK']}: say", '') }"
+      if message =~ /#{config[:nick]}: send /
+      Messenger.new().message(message.gsub("@", "").gsub("#{config[:nick]}: send", ''))
     end
-    if message =~ /#{ENV['NICK']}: send /
-      Messenger.new().message(message.gsub("@", "").gsub("#{ENV['NICK']}: send", ''))
-    end
-    if message =~ /#{ENV['NICK']}: sendpic /
-      Messenger.new().picture_message("just for you, from #{sender}", message.gsub("#{ENV['NICK']}: sendpic ", '') )
+    if message =~ /#{config[:nick]}: sendpic /
+      Messenger.new().picture_message("just for you, from #{sender}", message.gsub("#{config[:nick]}: sendpic ", '') )
     end
 
-    if message =~ /#{ENV['NICK']}: insult /
-      who = message.gsub(ENV['NICK'], "").gsub(': insult ', '')
+    if message =~ /#{config[:nick]}: insult /
+      who = message.gsub(/#{config[:nick]}: insult/, '')
       msg =   "#{who}: #{get_insult}"
       direct_at(channel, msg)
       say msg
     end
 
-    if message =~ /#{ENV['NICK']}: motivate /
-      who = message.gsub(ENV['NICK'], "").gsub(': motivate ', '')
+    if message =~ /#{config[:nick]}: motivate /
+      who = message.gsub(/#{config[:nick]}: motivate/, '')
       msg =   "#{who}: #{get_motivation}"
       direct_at(channel, msg)
       say msg
     end
 
-    if message =~ /#{ENV['NICK']}: say /
-      msg = message.gsub(ENV['NICK'], "").gsub(': say ', '')
+    if message =~ /#{config[:nick]}: say /
+      msg = message.gsub(/#{config[:nick]}: say/, '')
       say msg
     end
 
