@@ -77,7 +77,7 @@ class Bot < Summer::Connection
 
     if message =~ /#{ENV['NICK']}: insult /
       who = message.gsub("#{ENV['NICK']}", "").gsub(': insult', '')
-      msg =   "#{who}: #{get_insult.insult}"
+      msg =   "#{who}: #{get_insult}"
       direct_at(channel, msg)
       say msg
     end
