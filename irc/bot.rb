@@ -76,21 +76,21 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{ENV['NICK']}: insult /
-      who = message.gsub("#{ENV['NICK']}", "").gsub(': insult', '')
+      who = message.gsub(ENV['NICK'], "").gsub(': insult ', '')
       msg =   "#{who}: #{get_insult}"
       direct_at(channel, msg)
       say msg
     end
 
     if message =~ /#{ENV['NICK']}: motivate /
-      who = message.gsub("#{ENV['NICK']}", "").gsub(': motivate', '')
+      who = message.gsub(ENV['NICK'], "").gsub(': motivate ', '')
       msg =   "#{who}: #{get_motivation}"
       direct_at(channel, msg)
       say msg
     end
 
     if message =~ /#{ENV['NICK']}: say /
-      msg = message.gsub("#{ENV['NICK']}", "").gsub(': say', '')
+      msg = message.gsub(ENV['NICK'], "").gsub(': say ', '')
       say msg
     end
 
