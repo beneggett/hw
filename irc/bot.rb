@@ -28,15 +28,13 @@ class Bot < Summer::Connection
       who = how.split(' in ').first.gsub(status, '')
       first_name = who.split().first
       if status =~ /failed/
-        response = get_insult
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=fail&api_key=dc6zaTOxFJmzC") )
 
-        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{response.insult}"
+        message_reply = "Oh, no! #{who} broke the build on #{project}, #{branch} branch. Hey, #{first_name}, #{get_insult}"
       elsif message =~ /passed/
-        response = get_motivation
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=success&api_key=dc6zaTOxFJmzC") )
 
-        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{response.motivation}"
+        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{get_motivation}"
       elsif message =~ /errored/
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=error&api_key=dc6zaTOxFJmzC") )
 
@@ -78,16 +76,21 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{ENV['NICK']}: insult /
-      who = message.gsub(/#{ENV['NICK']}: insult /, "")
+      who = message.gsub("#{ENV['NICK']}", "").gsub(': insult', '')
       msg =   "#{who}: #{get_insult.insult}"
       direct_at(channel, msg)
       say msg
     end
 
     if message =~ /#{ENV['NICK']}: motivate /
-      who = message.gsub(/#{ENV['NICK']}: motivate /, "")
-      msg =   "#{who}: #{get_motivation.motivation}"
+      who = message.gsub("#{ENV['NICK']}", "").gsub(': motivate', '')
+      msg =   "#{who}: #{get_motivation}"
       direct_at(channel, msg)
+      say msg
+    end
+
+    if message =~ /#{ENV['NICK']}: say /
+      msg = message.gsub("#{ENV['NICK']}", "").gsub(': say', '')
       say msg
     end
 
@@ -115,11 +118,11 @@ class Bot < Summer::Connection
   end
 
   def get_insult
-    Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") )
+    Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") ).insult
   end
 
   def get_motivation
-    Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") )
+    Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") ).motivation
   end
 end
 Bot.new(ENV['IRC_SERVER'])
