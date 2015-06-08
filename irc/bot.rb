@@ -132,6 +132,7 @@ class Bot < Summer::Connection
 
   def get_inspiration
     Hashie::Mash.new(HTTParty.get("http://ron-swanson-quotes.herokuapp.com/quotes")).quote
+  end
 end
 Bot.new(ENV['IRC_SERVER'])
 
