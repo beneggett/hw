@@ -86,6 +86,14 @@ class Bot < Summer::Connection
       say msg
     end
 
+    if message =~ /#{config[:nick]}: inspire /
+      who = message.gsub(/#{config[:nick]}: inspire/, '')
+      msg =   "#{who}: #{get_inspiration}"
+      direct_at(channel, msg)
+      say msg
+    end
+
+
     if message =~ /#{config[:nick]}: say /
       msg = message.gsub(/#{config[:nick]}: say/, '')
       say msg
@@ -121,6 +129,9 @@ class Bot < Summer::Connection
   def get_motivation
     Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") ).motivation
   end
+
+  def get_inspiration
+    Hashie::Mash.new(HTTParty.get("http://ron-swanson-quotes.herokuapp.com/quotes")).quote
 end
 Bot.new(ENV['IRC_SERVER'])
 
