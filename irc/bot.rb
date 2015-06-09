@@ -114,7 +114,7 @@ class Bot < Summer::Connection
       unless s =~ URI_REGEX
         s
       end
-    end.join.gsub(',', '').gsub('/', ' ').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '').gsub('’', '')
+    end.join.gsub(',', '').gsub('/', ' ').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '').gsub('’', '').gsub('‘', '').gsub('’', '')
   end
 
   def say(message)
