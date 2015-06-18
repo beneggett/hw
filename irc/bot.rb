@@ -79,7 +79,7 @@ class Bot < Summer::Connection
       say msg
     end
 
-    if message =~ /#{config[:nick]}: be nice /
+    if message =~ /be nice/
       who = sender[:nick]
       msg =   "#{who}: #{get_insult}"
       direct_at(channel, msg)
