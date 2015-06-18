@@ -79,6 +79,13 @@ class Bot < Summer::Connection
       say msg
     end
 
+    if message =~ /#{config[:nick]}: be nice /
+      who = sender[:nick]
+      msg =   "#{who}: #{get_insult}"
+      direct_at(channel, msg)
+      say msg
+    end
+
     if message =~ /#{config[:nick]}: motivate /
       who = message.gsub(/#{config[:nick]}: motivate/, '')
       msg =   "#{who}: #{get_motivation}"
