@@ -87,8 +87,7 @@ class Bot < Summer::Connection
     end
 
     if message =~ /pun/
-      who = sender[:nick]
-      msg =   "#{who}: #{get_pun}"
+      msg =   get_pun
       direct_at(channel, msg)
       say msg
     end
