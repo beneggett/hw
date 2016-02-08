@@ -92,6 +92,14 @@ class Bot < Summer::Connection
       say msg
     end
 
+    jira_regexp = /\b(A[MW]P-\w+ )\b/
+    if message =~ jira_regexp
+      a = message.scan jira_regexp
+      issue = a.flatten.first.rstrip
+      msg = "Jira link: https://issues.accessdevelopment.com/browse/#{issue}"
+      direct_at(channel, msg)
+    end
+
     if message =~ /#{config[:nick]}: motivate /
       who = message.gsub(/#{config[:nick]}: motivate/, '')
       msg =   "#{who}, #{get_motivation}"
