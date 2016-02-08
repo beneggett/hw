@@ -92,7 +92,7 @@ class Bot < Summer::Connection
       say msg
     end
 
-    jira_regexp = /\b(A[MW]P-\w+)\b/
+    jira_regexp = /\b(A[MWL][PD]-\w+)\b/
     if message =~ jira_regexp && !message.include?('issues.accessdevelopment.com/browse')
       a = message.scan jira_regexp
       who = sender[:nick]
