@@ -148,12 +148,12 @@ class Bot < Summer::Connection
 
   def get_insult
     "Yurr dun reel stoopid. (my insult api is broken)"
-    Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") ).insult
+    # Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") ).insult
   end
 
   def get_motivation
     "Keep doing good. (my motivation api is broken)"
-    Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") ).motivation
+    # Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") ).motivation
   end
 
   def get_inspiration
