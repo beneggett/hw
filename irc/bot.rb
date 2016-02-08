@@ -95,8 +95,9 @@ class Bot < Summer::Connection
     jira_regexp = /\b(A[MW]P-\w+)\b/
     if message =~ jira_regexp && !message.include?('issues.accessdevelopment.com/browse')
       a = message.scan jira_regexp
+      who = sender[:nick]
       issue = a.flatten.each do |issue|
-        msg = "Jira link: https://issues.accessdevelopment.com/browse/#{issue}"
+        msg = "Have a free Jira link! #{who} is making me work too hard for this: https://issues.accessdevelopment.com/browse/#{issue} "
         puts msg
         direct_at(channel, msg)
       end
