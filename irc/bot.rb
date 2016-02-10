@@ -168,5 +168,8 @@ end
 
 BEGIN { File.write("#{ $0 }.pid", $$) }
 END { File.delete("#{ $0 }.pid") }
+$stdout.reopen("bot.log", "w")
+$stderr.reopen("error.log", "w")
+
 Bot.new(ENV['IRC_SERVER'])
 
