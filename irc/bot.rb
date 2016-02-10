@@ -165,5 +165,8 @@ class Bot < Summer::Connection
     Hashie::Mash.new(HTTParty.get("http://www.kimonolabs.com/api/2oiziu8k?apikey=a1843d6ac7111afa6ee3014e6834de0c")).results.puns.sample.pun
   end
 end
+
+BEGIN { File.write("#{ $0 }.pid", $$) }
+END { File.delete("#{ $0 }.pid") }
 Bot.new(ENV['IRC_SERVER'])
 
