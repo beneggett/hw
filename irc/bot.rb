@@ -166,8 +166,6 @@ class Bot < Summer::Connection
   end
 end
 
-Process.daemon
-
 BEGIN { File.write("#{ $0 }.pid", $$) }
 END { File.delete("#{ $0 }.pid") }
 $stdout.reopen("bot.log", "w")
