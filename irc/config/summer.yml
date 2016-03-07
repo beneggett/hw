@@ -1,6 +1,6 @@
-nick: ENV['NICK']
-use_ssl: true
-server_password: ENV['SERVER_PASS']
-channel: ENV['CHANNEL']
-auto_rejoin: true
-# nickserv_password:
+nick:              ENV['NICK']
+use_ssl:           true
+server_password:   ENV['SERVER_PASS']
+channel:           ENV['CHANNEL']
+auto_rejoin:       true
+nickserv_password: ENV['NICKSERV_PASSWORD']
