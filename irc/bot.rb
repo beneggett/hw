@@ -3,11 +3,13 @@ require 'summer'
 require 'httparty'
 require 'hashie'
 require 'ffaker'
+require 'pstore'
 
 load '../led-demo.rb'
 # load '../twilio.rb'
 class Bot < Summer::Connection
   URI_REGEX = %r"((?:(?:[^ :/?#]+):)(?://(?:[^ /?#]*))(?:[^ ?#]*)(?:\?(?:[^ #]*))?(?:#(?:[^ ]*))?)"
+  JIRA = PStore.new("jira.pstore")
 
   def channel_message(sender, channel, message)
     # unless sender[:nick] == 'quintinadam'
@@ -65,7 +67,7 @@ class Bot < Summer::Connection
       HW.new().who_picks_lunch?
     end
 
-      if message =~ /#{config[:nick]}: send /
+    if message =~ /#{config[:nick]}: send /
       Messenger.new().message(message.gsub("@", "").gsub("#{config[:nick]}: send", ''))
     end
     if message =~ /#{config[:nick]}: sendpic /
@@ -94,13 +96,22 @@ class Bot < Summer::Connection
 
     jira_regexp = /\b(A[MWL][PD]-\w+)\b/
     if message =~ jira_regexp && !message.include?('issues.accessdevelopment.com/browse')
+      JIRA.transaction do
+        JIRA[:links] ||= Hash.new
+      end
       a = message.scan jira_regexp
       who = sender[:nick]
       issues = a.flatten.map do |issue|
-        msg = "Have a free Jira link! @#{who} is making me work too hard for this: https://issues.accessdevelopment.com/browse/#{issue}"
+        JIRA.transaction do
+          if JIRA[:links][issue] && (JIRA[:links][issue] >= (DateTime.now - Rational(120, 86400)))
+            nil
+          else
+            JIRA[:links][issue] =  DateTime.now
+            "@#{who} is making me work too hard for this: https://issues.accessdevelopment.com/browse/#{issue}"
+          end
+        end
       end
-      issues.uniq.each {|msg| direct_at(channel, msg) }
-
+      issues.compact.uniq.each {|msg| direct_at(channel, msg) }
     end
 
     if message =~ /#{config[:nick]}: motivate /
