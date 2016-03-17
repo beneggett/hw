@@ -94,7 +94,7 @@ class Bot < Summer::Connection
       say msg
     end
 
-    jira_regexp = /\b(A[MWL][PD]-\w+)\b/
+    jira_regexp = /\b(A[MWL][PD]-\d+)\b/
     if message =~ jira_regexp && !message.include?('issues.accessdevelopment.com/browse')
       JIRA.transaction do
         JIRA[:links] ||= Hash.new
