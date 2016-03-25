@@ -165,7 +165,7 @@ class Bot < Summer::Connection
   def get_motivation(name)
 
     # "Keep doing good. (my motivation api is broken)"
-    Hashie::Mash.new(HTTParty.get("http://api.icndb.com/jokes/random?firstName=@#{name}&lastName= ") ).value.joke
+    Hashie::Mash.new(HTTParty.get("http://api.icndb.com/jokes/random?firstName=@#{name.gsub('@', '')}&lastName= ") ).value.joke
   end
 
   def get_inspiration
