@@ -36,7 +36,7 @@ class Bot < Summer::Connection
       elsif message =~ /passed/
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=success&api_key=dc6zaTOxFJmzC") )
 
-        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{get_motivation}"
+        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{get_motivation(first_name)}"
       elsif message =~ /errored/
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=error&api_key=dc6zaTOxFJmzC") )
 
@@ -116,7 +116,7 @@ class Bot < Summer::Connection
 
     if message =~ /#{config[:nick]}: motivate /
       who = message.gsub(/#{config[:nick]}: motivate/, '')
-      msg =   "#{who}, #{get_motivation}"
+      msg =   "#{who}, #{get_motivation(who)}"
       direct_at(channel, msg)
       say msg
     end
@@ -158,18 +158,19 @@ class Bot < Summer::Connection
   end
 
   def get_insult
-    "Yurr dun reel stoopid. (my insult api is broken)"
-    # Hashie::Mash.new(HTTParty.get("http://pleaseinsult.me/api?severity=random") ).insult
+    # "Yurr dun reel stoopid. (my insult api is broken)"
+    Hashie::Mash.new(HTTParty.get("http://quandyfactory.com/insult/json") ).insult
   end
 
-  def get_motivation
-    "Keep doing good. (my motivation api is broken)"
-    # Hashie::Mash.new(HTTParty.get("http://pleasemotivate.me/api") ).motivation
+  def get_motivation(name)
+
+    # "Keep doing good. (my motivation api is broken)"
+    Hashie::Mash.new(HTTParty.get("http://api.icndb.com/jokes/random?firstName=@#{name}&lastName= ") ).motivation
   end
 
   def get_inspiration
-    "You dun good. (my inspiration api is broken)"
-    # Hashie::Mash.new(HTTParty.get("http://ron-swanson-quotes.herokuapp.com/quotes")).quote
+    # "You dun good. (my inspiration api is broken)"
+    Hashie::Mash.new(HTTParty.get("http://ron-swanson-quotes.herokuapp.com/v2/quotes")).first
   end
 
   def get_pun
