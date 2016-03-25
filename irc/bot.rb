@@ -75,7 +75,7 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{config[:nick]}: insult /
-      who = message.gsub(/#{config[:nick]}: insult/, '')
+      who = message.gsub(/#{config[:nick]}: insult /, '')
       msg =   "#{who}: #{get_insult}"
       direct_at(channel, msg)
       say msg
@@ -115,14 +115,14 @@ class Bot < Summer::Connection
     end
 
     if message =~ /#{config[:nick]}: motivate /
-      who = message.gsub(/#{config[:nick]}: motivate/, '')
+      who = message.gsub(/#{config[:nick]}: motivate /, '')
       msg =   "#{who}, #{get_motivation(who)}"
       direct_at(channel, msg)
       say msg
     end
 
     if message =~ /#{config[:nick]}: inspire /
-      who = message.gsub(/#{config[:nick]}: inspire/, '')
+      who = message.gsub(/#{config[:nick]}: inspire /, '')
       msg =   "#{who}: #{get_inspiration}"
       direct_at(channel, msg)
       say msg
@@ -130,7 +130,7 @@ class Bot < Summer::Connection
 
 
     if message =~ /#{config[:nick]}: say /
-      msg = message.gsub(/#{config[:nick]}: say/, '')
+      msg = message.gsub(/#{config[:nick]}: say /, '')
       say msg
     end
 
