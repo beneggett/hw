@@ -170,7 +170,7 @@ class Bot < Summer::Connection
 
   def get_inspiration
     # "You dun good. (my inspiration api is broken)"
-    Hashie::Mash.new(HTTParty.get("http://ron-swanson-quotes.herokuapp.com/v2/quotes")).first
+    HTTParty.get("http://ron-swanson-quotes.herokuapp.com/v2/quotes").first
   end
 
   def get_pun
