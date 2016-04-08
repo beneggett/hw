@@ -4,6 +4,7 @@ require 'httparty'
 require 'hashie'
 require 'ffaker'
 require 'pstore'
+require 'audite'
 
 load '../led-demo.rb'
 # load '../twilio.rb'
@@ -149,12 +150,20 @@ class Bot < Summer::Connection
       unless s =~ URI_REGEX
         s
       end
-    end.join.gsub(',', '').gsub('/', ' ').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '').gsub('’', '').gsub('‘', '').gsub('’', '')
+    end.join.gsub(',', '').gsub('/', ' ').gsub('@', '').gsub('"', '').gsub("'", '').gsub('#', '').gsub('(', '').gsub(')', '').gsub('!', '').gsub('’', '').gsub('‘', '').gsub('’', '').gsub('&quot;', "")
   end
 
   def say(message)
-    # msg = clean_message_for_speech(message)
-    # msg.scan(/.{1,95}\b|.{1,95}/).map(&:strip).each {|trimmed_message| `say "#{trimmed_message}" `}
+    text = clean_message_for_speech(message)
+    key = 'c3d6f27dbd254282becd156f3db13206'
+    returned_mp3 = HTTParty.get("http://api.voicerss.org/?key=#{key}&src=#{text}'&hl=en-gb&f=48khz_16bit_stereo")
+
+    file = 'speak.mp3'
+    File.open(file, 'w') { |file| file.write(returned_mp3.parsed_response) }
+
+    player = Audite.new
+    player.load('speak.mp3')
+    player.start_stream
   end
 
   def get_insult
@@ -165,7 +174,7 @@ class Bot < Summer::Connection
   def get_motivation(name)
 
     # "Keep doing good. (my motivation api is broken)"
-    Hashie::Mash.new(HTTParty.get("http://api.icndb.com/jokes/random?firstName=#{name.gsub('@', '')}&lastName= ") ).value.joke.gsub(name, "@#{name}")
+    Hashie::Mash.new(HTTParty.get("http://api.icndb.com/jokes/random?firstName=#{name.gsub('@', '')}&lastName=") ).value.joke.gsub('&quot;', "\'")
   end
 
   def get_inspiration
@@ -176,6 +185,7 @@ class Bot < Summer::Connection
   def get_pun
     Hashie::Mash.new(HTTParty.get("http://www.kimonolabs.com/api/2oiziu8k?apikey=a1843d6ac7111afa6ee3014e6834de0c")).results.puns.sample.pun
   end
+
 end
 
 BEGIN { File.write("#{ $0 }.pid", $$) }
