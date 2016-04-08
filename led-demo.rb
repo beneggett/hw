@@ -58,7 +58,7 @@ class HW
   end
 
   def spin_the_wheel
-    `say 'spinning the wheel'`
+    say('spinning the wheel')
     time = 0
     delay = 0.001
     leds.cycle do |led|
@@ -71,7 +71,7 @@ class HW
         winner = pin_names.find{|pin| pin[:led] == led.pin}[:name]
         puts "#{winner.capitalize} wins!"
         led.on
-        `say "#{winner.capitalize} wins, you sweet sweet druggie!"`
+        say("#{winner.capitalize} wins, you sweet sweet druggie!")
 
         break
       end
@@ -114,13 +114,11 @@ class HW
   def say(message)
     text = message
     key = 'c3d6f27dbd254282becd156f3db13206'
-    returned_mp3 = HTTParty.get("http://api.voicerss.org/?key=#{key}&src=#{text}'&hl=en-en&f=48khz_16bit_stereo")
+    returned_mp3 = HTTParty.get("http://api.voicerss.org/?key=#{key}&src=#{text}'&hl=en-us&f=48khz_16bit_stereo")
     file = 'speak.mp3'
     File.open(file, 'w') { |file| file.write(returned_mp3.parsed_response) }
     `omxplayer speak.mp3`
   end
-
-
 
   def activate!
     button.down do
