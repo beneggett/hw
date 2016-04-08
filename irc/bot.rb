@@ -4,7 +4,6 @@ require 'httparty'
 require 'hashie'
 require 'ffaker'
 require 'pstore'
-require 'audite'
 
 load '../led-demo.rb'
 # load '../twilio.rb'
@@ -157,13 +156,9 @@ class Bot < Summer::Connection
     text = clean_message_for_speech(message)
     key = 'c3d6f27dbd254282becd156f3db13206'
     returned_mp3 = HTTParty.get("http://api.voicerss.org/?key=#{key}&src=#{text}'&hl=en-gb&f=48khz_16bit_stereo")
-
     file = 'speak.mp3'
     File.open(file, 'w') { |file| file.write(returned_mp3.parsed_response) }
-
-    player = Audite.new
-    player.load('speak.mp3')
-    player.start_stream
+    `omxplayer speak.mp3`
   end
 
   def get_insult
