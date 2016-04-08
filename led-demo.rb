@@ -1,4 +1,5 @@
 require 'dino'
+require 'httparty'
 
 class HW
 
@@ -79,7 +80,7 @@ class HW
   end
 
   def who_picks_lunch?
-    `say 'who gets to pick lunch today?'`
+    say('who gets to pick lunch today?')
     time = 0
     delay = 0.001
     leds.cycle do |led|
@@ -94,7 +95,7 @@ class HW
         when 'yellow'
           picker = 'cody'
         when 'green'
-            picker = 'cody'
+            picker = 'Andy'
         when 'blue'
           picker = 'ben'
         when 'red'
@@ -102,12 +103,21 @@ class HW
         end
         puts "#{picker.capitalize} wins!"
         led.on
-        `say "#{picker.capitalize} gets to pick lunch today, and cody pays. you lucky dog!"`
+        say("#{picker.capitalize} gets to pick lunch today, and cody pays. you lucky dog!")
 
         break
       end
       # break if button.down
     end
+  end
+
+  def say(message)
+    text = message
+    key = 'c3d6f27dbd254282becd156f3db13206'
+    returned_mp3 = HTTParty.get("http://api.voicerss.org/?key=#{key}&src=#{text}'&hl=en-en&f=48khz_16bit_stereo")
+    file = 'speak.mp3'
+    File.open(file, 'w') { |file| file.write(returned_mp3.parsed_response) }
+    `omxplayer speak.mp3`
   end
 
 
