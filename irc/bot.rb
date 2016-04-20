@@ -158,7 +158,7 @@ class Bot < Summer::Connection
     returned_mp3 = HTTParty.get("http://api.voicerss.org/?key=#{key}&src=#{text}'&hl=en-us&f=48khz_16bit_stereo")
     file = 'speak.mp3'
     File.open(file, 'w') { |file| file.write(returned_mp3.parsed_response) }
-    `omxplayer --vol -500 speak.mp3`
+    `omxplayer --vol -1000 speak.mp3`
   end
 
   def get_insult
