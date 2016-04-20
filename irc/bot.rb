@@ -36,7 +36,7 @@ class Bot < Summer::Connection
       elsif message =~ /passed/
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=success&api_key=dc6zaTOxFJmzC") )
 
-        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{first_name}, #{get_motivation(first_name)}"
+        message_reply = "Great Job, #{who}! Your tests are passing on #{project}, #{branch} branch! You know, #{get_motivation(first_name)}"
       elsif message =~ /errored/
         gif =  Hashie::Mash.new(HTTParty.get("http://api.giphy.com/v1/gifs/translate?s=error&api_key=dc6zaTOxFJmzC") )
 
@@ -116,7 +116,7 @@ class Bot < Summer::Connection
 
     if message =~ /#{config[:nick]}: motivate /
       who = message.gsub(/#{config[:nick]}: motivate /, '')
-      msg =   "#{who}, #{get_motivation(who)}"
+      msg =   get_motivation(who)
       direct_at(channel, msg)
       say msg
     end
@@ -158,7 +158,7 @@ class Bot < Summer::Connection
     returned_mp3 = HTTParty.get("http://api.voicerss.org/?key=#{key}&src=#{text}'&hl=en-us&f=48khz_16bit_stereo")
     file = 'speak.mp3'
     File.open(file, 'w') { |file| file.write(returned_mp3.parsed_response) }
-    `omxplayer speak.mp3`
+    `omxplayer --vol -1000 speak.mp3`
   end
 
   def get_insult
